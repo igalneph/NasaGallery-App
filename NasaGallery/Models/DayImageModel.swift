@@ -45,7 +45,8 @@ class DayImageModel: ObservableObject {
         imageStatus = .fetching
         
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            guard let url = URL(string: "https://api.nasa.gov/planetary/apod?api_key=pviQP59rYphmhg8EpCfgwag2coDzfcIXWhxS2ClU&date=\(date.convertToString())") else {
+            guard let apiKey: String = try? Configuration.value(for: "NASA_API_KEY"),
+                let url = URL(string: "https://api.nasa.gov/planetary/apod?api_key=\(apiKey)&date=\(date.convertToString())") else {
                 DispatchQueue.main.async { [weak self] in
                     self?.imageStatus = .failed
                 }
